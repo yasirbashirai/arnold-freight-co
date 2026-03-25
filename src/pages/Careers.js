@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaTruck, FaHandshake, FaChartLine, FaUsers, FaCheckCircle, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaTruck, FaHandshake, FaChartLine, FaUsers } from 'react-icons/fa';
 
 const useInView = (threshold = 0.15) => {
   const ref = useRef(null);

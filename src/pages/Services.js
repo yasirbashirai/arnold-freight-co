@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaTruck, FaClock, FaBoxes, FaRocket, FaUserTie, FaArrowRight, FaPhoneAlt, FaCheckCircle } from 'react-icons/fa';
+import { FaTruck, FaBoxes, FaRocket, FaUserTie, FaArrowRight, FaPhoneAlt, FaCheckCircle } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import QuoteForm from '../components/QuoteForm';
 

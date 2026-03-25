@@ -81,6 +81,7 @@ const Footer = () => {
             {/* Social Icons */}
             <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
               {[FaFacebookF, FaLinkedinIn, FaInstagram].map((Icon, i) => (
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
                 <a key={i} href="#" style={{
                   width: '36px', height: '36px', borderRadius: '50%', border: '1px solid #c9a84c',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
