@@ -155,10 +155,10 @@ const Home = () => {
               <Link to="/contact" className="btn-gold pulse-ring" style={{ fontSize: '16px', padding: '16px 40px' }}>
                 Get a Quote
               </Link>
-              <a href="tel:5551234567" className="btn-outline-gold" style={{
+              <a href="tel:4234144982" className="btn-outline-gold" style={{
                 fontSize: '16px', padding: '16px 36px', display: 'flex', alignItems: 'center', gap: '10px',
               }}>
-                <FaPhoneAlt /> (555) 123-4567
+                <FaPhoneAlt /> (423) 414-4982
               </a>
             </motion.div>
           </div>
@@ -353,7 +353,7 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div className="parallax-img" style={{ height: '550px', borderRadius: '20px' }}>
-                <img src={TRUCK_IMAGES.truck2} alt="White American freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={TRUCK_IMAGES.truck2} alt="Freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </motion.div>
           </div>
@@ -371,7 +371,7 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="parallax-img" style={{ height: '500px' }}>
-                <img src={TRUCK_IMAGES.truck5} alt="White semi truck on highway" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={TRUCK_IMAGES.truck5} alt="Semi truck on highway" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </motion.div>
 
@@ -429,19 +429,16 @@ const Home = () => {
               </p>
 
               <div className="parallax-img" style={{ height: '280px', marginBottom: '24px' }}>
-                <img src={TRUCK_IMAGES.truck4} alt="White freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={TRUCK_IMAGES.truck4} alt="Freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <a href="tel:5551234567" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1a2332', textDecoration: 'none', fontSize: '22px', fontWeight: '800' }}>
+                <a href="tel:4234144982" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1a2332', textDecoration: 'none', fontSize: '22px', fontWeight: '800' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #c9a84c, #b8943a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a2332' }}>
                     <FaPhoneAlt />
                   </div>
-                  (555) 123-4567
+                  (423) 414-4982
                 </a>
-                <p style={{ color: '#c9a84c', fontSize: '15px', margin: 0, fontWeight: '700' }}>
-                  DOT #1234567 &nbsp;|&nbsp; MC #7854321
-                </p>
               </div>
             </motion.div>
 
@@ -494,7 +491,7 @@ const Home = () => {
             >
               <FaCheckCircle /> Get Started Today
             </Link>
-            <a href="tel:5551234567" style={{
+            <a href="tel:4234144982" style={{
               background: 'transparent', color: '#1a2332', padding: '16px 36px',
               borderRadius: '6px', textDecoration: 'none', fontWeight: '700', fontSize: '16px',
               border: '2px solid #1a2332', transition: 'all 0.4s',

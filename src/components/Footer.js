@@ -79,9 +79,9 @@ const Footer = () => {
             <h4 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '24px', color: '#c9a84c' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {[
-                { icon: <FaPhone />, text: '(555) 123-4567', href: 'tel:5551234567' },
-                { icon: <FaEnvelope />, text: 'info@arnoldfreight.com', href: 'mailto:info@arnoldfreight.com' },
-                { icon: <FaMapMarkerAlt />, text: '1234 Logistics Lane, City, State, 12345', href: null },
+                { icon: <FaPhone />, text: '(423) 414-4982', href: 'tel:4234144982' },
+                { icon: <FaEnvelope />, text: 'info@arnoldfreightco.com', href: 'mailto:info@arnoldfreightco.com' },
+                { icon: <FaMapMarkerAlt />, text: '200 W. Martin Luther King Blvd, Suite 1000, Chattanooga, TN 37402', href: null },
               ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <span style={{ color: '#c9a84c', marginTop: '2px' }}>{item.icon}</span>
@@ -124,7 +124,7 @@ const Footer = () => {
       <div style={{ borderTop: '1px solid rgba(201,168,76,0.15)', padding: '20px 24px' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <p style={{ color: '#6b7280', fontSize: '13px', margin: 0 }}>&copy; 2026 Arnold Freight Co. LLC. All rights reserved.</p>
-          <p style={{ color: '#6b7280', fontSize: '13px', margin: 0 }}>DOT #1234567 | MC #7854321</p>
+          {/* DOT/MC numbers removed */}
         </div>
       </div>
     </footer>

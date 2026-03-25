@@ -312,7 +312,7 @@ const Careers = () => {
 
           <p style={{ textAlign: 'center', marginTop: '24px', color: '#6b7280', fontSize: '14px' }}>
             Or email your resume directly to{' '}
-            <a href="mailto:info@arnoldfreight.com" style={{ color: '#c9a84c', textDecoration: 'none', fontWeight: '700' }}>info@arnoldfreight.com</a>
+            <a href="mailto:info@arnoldfreightco.com" style={{ color: '#c9a84c', textDecoration: 'none', fontWeight: '700' }}>info@arnoldfreightco.com</a>
           </p>
         </div>
       </section>

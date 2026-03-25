@@ -315,14 +315,14 @@ const About = () => {
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
             >Contact Us</Link>
-            <a href="tel:5551234567" style={{
+            <a href="tel:4234144982" style={{
               background: 'transparent', color: '#1a2332', padding: '16px 36px', borderRadius: '6px',
               textDecoration: 'none', fontWeight: '700', border: '2px solid #1a2332', display: 'flex', alignItems: 'center', gap: '8px',
               transition: 'all 0.4s',
             }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#1a2332'; e.currentTarget.style.color = '#fff'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1a2332'; }}
-            ><FaPhoneAlt /> (555) 123-4567</a>
+            ><FaPhoneAlt /> (423) 414-4982</a>
           </div>
         </motion.div>
       </section>

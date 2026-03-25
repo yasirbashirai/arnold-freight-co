@@ -17,9 +17,9 @@ const Contact = () => {
   const [mainRef, mainInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const contactInfo = [
-    { icon: <FaPhoneAlt size={22} />, label: 'Phone', value: '(555) 123-4567', href: 'tel:5551234567', color: '#10b981' },
-    { icon: <FaEnvelope size={22} />, label: 'Email', value: 'info@arnoldfreight.com', href: 'mailto:info@arnoldfreight.com', color: '#6366f1' },
-    { icon: <FaMapMarkerAlt size={22} />, label: 'Address', value: '1234 Logistics Lane, City, State, 12345', href: null, color: '#f59e0b' },
+    { icon: <FaPhoneAlt size={22} />, label: 'Phone', value: '(423) 414-4982', href: 'tel:4234144982', color: '#10b981' },
+    { icon: <FaEnvelope size={22} />, label: 'Email', value: 'info@arnoldfreightco.com', href: 'mailto:info@arnoldfreightco.com', color: '#6366f1' },
+    { icon: <FaMapMarkerAlt size={22} />, label: 'Address', value: '200 W. Martin Luther King Blvd, Suite 1000, Chattanooga, TN 37402', href: null, color: '#f59e0b' },
   ];
 
   return (
@@ -111,30 +111,9 @@ const Contact = () => {
                 ))}
               </div>
 
-              {/* DOT & MC */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={mainInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.6 }}
-                style={{
-                  display: 'flex', gap: '32px', padding: '24px', background: '#1a2332',
-                  borderRadius: '12px', flexWrap: 'wrap', marginBottom: '24px',
-                }}
-              >
-                {[
-                  { label: 'DOT Number', value: '#1234567' },
-                  { label: 'MC Number', value: '#7854321' },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase' }}>{item.label}</span>
-                    <div style={{ color: '#c9a84c', fontSize: '22px', fontWeight: '900', fontFamily: 'monospace' }}>{item.value}</div>
-                  </div>
-                ))}
-              </motion.div>
-
               {/* Truck image */}
               <div className="parallax-img" style={{ height: '220px' }}>
-                <img src={TRUCK_IMAGES.truck2} alt="White freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={TRUCK_IMAGES.truck2} alt="Freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </motion.div>
 
@@ -227,8 +206,8 @@ const Contact = () => {
           <p style={{ fontSize: '13px', color: '#9ca3af', margin: '0 0 8px', lineHeight: '1.5' }}>
             Chattanooga, Tennessee<br />Serving businesses nationwide
           </p>
-          <a href="tel:5551234567" style={{ color: '#c9a84c', textDecoration: 'none', fontSize: '14px', fontWeight: '700' }}>
-            (555) 123-4567
+          <a href="tel:4234144982" style={{ color: '#c9a84c', textDecoration: 'none', fontSize: '14px', fontWeight: '700' }}>
+            (423) 414-4982
           </a>
         </motion.div>
       </section>

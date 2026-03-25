@@ -309,14 +309,14 @@ const Services = () => {
               <p style={{ color: '#6b7280', fontSize: '16px', lineHeight: '1.8', marginBottom: '28px' }}>
                 Have a shipment ready? Contact us today for a fast quote and reliable service you can trust.
               </p>
-              <a href="tel:5551234567" style={{
+              <a href="tel:4234144982" style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 color: '#1a2332', fontSize: '22px', fontWeight: '800', textDecoration: 'none', marginBottom: '20px',
               }}>
                 <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #c9a84c, #b8943a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a2332' }}>
                   <FaPhoneAlt />
                 </div>
-                (555) 123-4567
+                (423) 414-4982
               </a>
               {['Freight Brokerage', 'Truckload Shipping', 'LTL (Less Than Truckload)', 'Expedited Freight'].map((s, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 0', color: '#374151', fontSize: '15px' }}>
