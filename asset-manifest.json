@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/arnold-freight-co/static/css/main.d62607bf.css",
-    "main.js": "/arnold-freight-co/static/js/main.a7d34340.js",
+    "main.js": "/arnold-freight-co/static/js/main.2a034721.js",
     "static/js/453.95646365.chunk.js": "/arnold-freight-co/static/js/453.95646365.chunk.js",
     "static/media/hero-truck.png": "/arnold-freight-co/static/media/hero-truck.ab054a7dc93bb20187cb.png",
     "static/media/warehouse-workers.png": "/arnold-freight-co/static/media/warehouse-workers.d0311712ae7c2e74486f.png",
@@ -11,11 +11,11 @@
     "static/media/highway-truck.jpg": "/arnold-freight-co/static/media/highway-truck.f8e7d8d36f31c869241d.jpg",
     "index.html": "/arnold-freight-co/index.html",
     "main.d62607bf.css.map": "/arnold-freight-co/static/css/main.d62607bf.css.map",
-    "main.a7d34340.js.map": "/arnold-freight-co/static/js/main.a7d34340.js.map",
+    "main.2a034721.js.map": "/arnold-freight-co/static/js/main.2a034721.js.map",
     "453.95646365.chunk.js.map": "/arnold-freight-co/static/js/453.95646365.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d62607bf.css",
-    "static/js/main.a7d34340.js"
+    "static/js/main.2a034721.js"
   ]
 }
