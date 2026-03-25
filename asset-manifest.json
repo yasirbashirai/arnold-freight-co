@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/arnold-freight-co/static/css/main.d62607bf.css",
-    "main.js": "/arnold-freight-co/static/js/main.2a034721.js",
-    "static/js/453.95646365.chunk.js": "/arnold-freight-co/static/js/453.95646365.chunk.js",
-    "static/media/hero-truck.png": "/arnold-freight-co/static/media/hero-truck.ab054a7dc93bb20187cb.png",
-    "static/media/warehouse-workers.png": "/arnold-freight-co/static/media/warehouse-workers.d0311712ae7c2e74486f.png",
-    "static/media/warehouse-truck.png": "/arnold-freight-co/static/media/warehouse-truck.bf63cc829d6cc9287fed.png",
-    "static/media/services-truck.png": "/arnold-freight-co/static/media/services-truck.b08ec5eab6c54a63790b.png",
-    "static/media/logo-transparent.png": "/arnold-freight-co/static/media/logo-transparent.21a5e0dc70de9206b4c7.png",
-    "static/media/highway-truck.jpg": "/arnold-freight-co/static/media/highway-truck.f8e7d8d36f31c869241d.jpg",
-    "index.html": "/arnold-freight-co/index.html",
-    "main.d62607bf.css.map": "/arnold-freight-co/static/css/main.d62607bf.css.map",
-    "main.2a034721.js.map": "/arnold-freight-co/static/js/main.2a034721.js.map",
-    "453.95646365.chunk.js.map": "/arnold-freight-co/static/js/453.95646365.chunk.js.map"
+    "main.css": "./static/css/main.d62607bf.css",
+    "main.js": "./static/js/main.8702d0a3.js",
+    "static/js/453.95646365.chunk.js": "./static/js/453.95646365.chunk.js",
+    "static/media/hero-truck.png": "./static/media/hero-truck.ab054a7dc93bb20187cb.png",
+    "static/media/warehouse-workers.png": "./static/media/warehouse-workers.d0311712ae7c2e74486f.png",
+    "static/media/warehouse-truck.png": "./static/media/warehouse-truck.bf63cc829d6cc9287fed.png",
+    "static/media/services-truck.png": "./static/media/services-truck.b08ec5eab6c54a63790b.png",
+    "static/media/logo-transparent.png": "./static/media/logo-transparent.21a5e0dc70de9206b4c7.png",
+    "static/media/highway-truck.jpg": "./static/media/highway-truck.f8e7d8d36f31c869241d.jpg",
+    "index.html": "./index.html",
+    "main.d62607bf.css.map": "./static/css/main.d62607bf.css.map",
+    "main.8702d0a3.js.map": "./static/js/main.8702d0a3.js.map",
+    "453.95646365.chunk.js.map": "./static/js/453.95646365.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d62607bf.css",
-    "static/js/main.2a034721.js"
+    "static/js/main.8702d0a3.js"
   ]
 }
