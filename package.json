@@ -2,7 +2,7 @@
   "name": "arnold-freight-co",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://yasirbashirai.github.io/arnold-freight-co",
+  "homepage": ".",
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",
     "@testing-library/dom": "^10.4.1",
