@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -27,16 +27,6 @@ const TRUCK_IMAGES = {
 };
 
 const Home = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouse = (e) => {
-      setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
-    };
-    window.addEventListener('mousemove', handleMouse);
-    return () => window.removeEventListener('mousemove', handleMouse);
-  }, []);
-
   const [statsRef, statsInView] = useInView({ triggerOnce: true, threshold: 0.3 });
   const [servicesRef, servicesInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [whyRef, whyInView] = useInView({ triggerOnce: true, threshold: 0.1 });
