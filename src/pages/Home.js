@@ -1,307 +1,522 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaTruck, FaHandshake, FaClock, FaShieldAlt, FaQuoteLeft, FaPhoneAlt, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import CountUp from 'react-countup';
+import { TypeAnimation } from 'react-type-animation';
+import {
+  FaTruck, FaHandshake, FaClock, FaShieldAlt, FaPhoneAlt, FaArrowRight,
+  FaCheckCircle, FaQuoteLeft, FaBoxes, FaRocket, FaStar
+} from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import QuoteForm from '../components/QuoteForm';
 
-/* Intersection Observer hook for scroll animations */
-const useInView = (threshold = 0.15) => {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setInView(true);
-    }, { threshold });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold]);
-  return [ref, inView];
-};
+/* Local truck images */
+import heroTruck from '../assets/hero-truck.png';
+import servicesTruck from '../assets/services-truck.png';
+import warehouseTruck from '../assets/warehouse-truck.png';
+import highwayTruck from '../assets/highway-truck.jpg';
+import warehouseWorkers from '../assets/warehouse-workers.png';
 
-/* Animated counter */
-const Counter = ({ end, suffix = '', duration = 2000 }) => {
-  const [count, setCount] = useState(0);
-  const [ref, inView] = useInView(0.3);
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const step = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= end) { setCount(end); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, end, duration]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
+const TRUCK_IMAGES = {
+  hero: heroTruck,
+  truck2: warehouseTruck,
+  truck3: highwayTruck,
+  truck4: servicesTruck,
+  truck5: warehouseWorkers,
 };
 
 const Home = () => {
-  const [heroRef, heroInView] = useInView(0.1);
-  const [servicesRef, servicesInView] = useInView();
-  const [whyRef, whyInView] = useInView();
-  const [stepsRef, stepsInView] = useInView();
-  const [quoteRef, quoteInView] = useInView();
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouse = (e) => {
+      setMousePos({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
+    };
+    window.addEventListener('mousemove', handleMouse);
+    return () => window.removeEventListener('mousemove', handleMouse);
+  }, []);
+
+  const [statsRef, statsInView] = useInView({ triggerOnce: true, threshold: 0.3 });
+  const [servicesRef, servicesInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [whyRef, whyInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [stepsRef, stepsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [quoteRef, quoteInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [marqueeRef] = useInView({ triggerOnce: true });
 
   const services = [
-    { icon: <FaTruck size={32} />, title: 'Freight Brokerage', desc: 'Efficiently match shippers with carriers to ensure on-time delivery and cost-effective solutions.' },
-    { icon: <MdLocalShipping size={32} />, title: 'Truckload Shipping', desc: 'Full truckload shipping services for nationwide and regional deliveries.' },
-    { icon: <FaTruck size={32} style={{ transform: 'scaleX(-1)' }} />, title: 'LTL Shipping', desc: 'Cost-effective less than truckload services for smaller shipments.' },
-    { icon: <FaClock size={32} />, title: 'Expedited Freight', desc: 'Urgent transport solutions for time-sensitive and critical shipments.' },
+    { icon: <FaTruck size={30} />, title: 'Freight Brokerage', desc: 'Efficiently match shippers with carriers to ensure on-time delivery and cost-effective solutions.' },
+    { icon: <MdLocalShipping size={30} />, title: 'Truckload Shipping', desc: 'Full truckload shipping services for nationwide and regional deliveries.' },
+    { icon: <FaBoxes size={30} />, title: 'LTL Shipping', desc: 'Cost-effective less than truckload services for smaller shipments.' },
+    { icon: <FaRocket size={30} />, title: 'Expedited Freight', desc: 'Urgent transport solutions for time-sensitive and critical shipments.' },
   ];
 
-  const steps = [
-    { num: '1', title: 'Request a Quote', desc: 'Provide your shipment details and receive a fast, competitive quote.' },
-    { num: '2', title: 'We Secure the Right Carrier', desc: 'We match your load with a vetted, reliable carrier from our network.' },
-    { num: '3', title: 'Track & Deliver', desc: 'Stay informed while we ensure safe, on-time delivery.' },
+  const stats = [
+    { end: 500, suffix: '+', label: 'Loads Delivered', icon: <FaTruck /> },
+    { end: 50, suffix: '+', label: 'Active Clients', icon: <FaHandshake /> },
+    { end: 98, suffix: '%', label: 'On-Time Rate', icon: <FaCheckCircle /> },
+    { end: 24, suffix: '/7', label: 'Support Available', icon: <FaClock /> },
   ];
 
   return (
-    <div>
-      {/* ====== HERO SECTION ====== */}
-      <section ref={heroRef} style={{
+    <div style={{ overflow: 'hidden' }}>
+      {/* ====== HERO — Matching design: text left, truck right ====== */}
+      <section style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative',
-        background: 'linear-gradient(135deg, #0f1724 0%, #1a2332 100%)',
-        overflow: 'hidden',
+        background: '#0f1724', overflow: 'hidden',
       }}>
-        {/* Background image */}
+        {/* Full background truck image */}
+        <motion.div
+          style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `url(${TRUCK_IMAGES.hero})`,
+            backgroundSize: 'cover', backgroundPosition: 'center right',
+          }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        {/* Left-to-right gradient overlay: solid navy on left, transparent on right to reveal truck */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          opacity: 0.3,
+          background: 'linear-gradient(to right, rgba(15,23,36,0.97) 0%, rgba(15,23,36,0.92) 30%, rgba(15,23,36,0.7) 55%, rgba(15,23,36,0.3) 75%, rgba(15,23,36,0.1) 100%)',
         }} />
-        <div className="hero-overlay" style={{ position: 'absolute', inset: 0 }} />
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '120px 24px 80px', position: 'relative', zIndex: 1, width: '100%' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '40px', maxWidth: '650px' }}>
-            <div className={heroInView ? 'animate-slide-left' : ''} style={{ opacity: heroInView ? 1 : 0 }}>
-              <div style={{ display: 'inline-block', background: 'rgba(201, 168, 76, 0.15)', border: '1px solid rgba(201, 168, 76, 0.3)', borderRadius: '24px', padding: '6px 16px', marginBottom: '20px' }}>
-                <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '600' }}>CHATTANOOGA, TN — NATIONWIDE SERVICE</span>
-              </div>
-              <h1 style={{ fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: '800', color: '#ffffff', lineHeight: '1.15', margin: '0 0 20px' }}>
-                Reliable Freight &<br />
-                <span className="text-gradient-gold">Logistics Solutions</span>
-              </h1>
-              <p style={{ fontSize: '18px', color: '#d1d5db', lineHeight: '1.7', marginBottom: '32px', maxWidth: '500px' }}>
-                Trusted transportation and shipping services that get your goods where they need to be — on time, every time.
-              </p>
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                <Link to="/contact" className="btn-gold pulse-gold" style={{ fontSize: '16px', padding: '14px 32px' }}>
-                  Get a Quote
-                </Link>
-                <a href="tel:5551234567" className="btn-outline-gold" style={{ fontSize: '16px', padding: '14px 32px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FaPhoneAlt /> (555) 123-4567
-                </a>
-              </div>
-            </div>
+        {/* Top navy strip — matching the design */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '80px',
+          background: 'linear-gradient(to bottom, rgba(15,23,36,1), rgba(15,23,36,0.8), transparent)',
+          zIndex: 2,
+        }} />
+
+        {/* Bottom gradient fade to white */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px',
+          background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.05), rgba(255,255,255,0.15))',
+          zIndex: 2,
+        }} />
+
+        {/* Subtle floating particles on the left side */}
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="particle" style={{
+            width: `${15 + i * 10}px`, height: `${15 + i * 10}px`,
+            left: `${5 + i * 8}%`, top: `${20 + i * 15}%`,
+            animation: `${i % 2 === 0 ? 'float' : 'floatReverse'} ${5 + i}s ease-in-out infinite`,
+            animationDelay: `${i * 0.7}s`,
+          }} />
+        ))}
+
+        {/* Hero content — left aligned */}
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '140px 24px 100px', position: 'relative', zIndex: 3, width: '100%' }}>
+          <div style={{ maxWidth: '600px' }}>
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              style={{
+                fontSize: 'clamp(42px, 5.5vw, 68px)', fontWeight: '900',
+                color: '#ffffff', lineHeight: '1.1', margin: '0 0 10px',
+              }}
+            >
+              Reliable Freight &
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              style={{
+                fontSize: 'clamp(42px, 5.5vw, 68px)', fontWeight: '900',
+                lineHeight: '1.1', marginBottom: '24px', minHeight: '80px',
+              }}
+            >
+              <TypeAnimation
+                sequence={[
+                  'Logistics Solutions', 2000,
+                  'Shipping Partners', 2000,
+                  'Freight Services', 2000,
+                  'Transport Experts', 2000,
+                ]}
+                wrapper="span"
+                speed={40}
+                repeat={Infinity}
+                className="text-gradient-gold"
+              />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              style={{
+                fontSize: '18px', color: '#d1d5db', lineHeight: '1.8',
+                marginBottom: '40px', maxWidth: '480px',
+              }}
+            >
+              Trusted transportation and shipping services that get your goods where they need to be — on time, every time.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
+            >
+              <Link to="/contact" className="btn-gold pulse-ring" style={{ fontSize: '16px', padding: '16px 40px' }}>
+                Get a Quote
+              </Link>
+              <a href="tel:5551234567" className="btn-outline-gold" style={{
+                fontSize: '16px', padding: '16px 36px', display: 'flex', alignItems: 'center', gap: '10px',
+              }}>
+                <FaPhoneAlt /> (555) 123-4567
+              </a>
+            </motion.div>
           </div>
         </div>
 
         {/* Scroll indicator */}
-        <div style={{ position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
-          <div style={{ width: '24px', height: '40px', border: '2px solid rgba(201,168,76,0.5)', borderRadius: '12px', margin: '0 auto 8px', position: 'relative' }}>
-            <div style={{ width: '4px', height: '8px', background: '#c9a84c', borderRadius: '2px', position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', animation: 'fadeInUp 1.5s ease infinite' }} />
+        <motion.div
+          animate={{ y: [0, 12, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          style={{ position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)', zIndex: 3 }}
+        >
+          <div style={{ width: '28px', height: '44px', border: '2px solid rgba(201,168,76,0.5)', borderRadius: '14px', display: 'flex', justifyContent: 'center', paddingTop: '8px' }}>
+            <motion.div
+              animate={{ y: [0, 14, 0], opacity: [1, 0.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+              style={{ width: '4px', height: '10px', background: '#c9a84c', borderRadius: '2px' }}
+            />
           </div>
+        </motion.div>
+      </section>
+
+      {/* ====== STATS STRIP ====== */}
+      <section ref={statsRef} className="bg-navy-dark" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(201,168,76,0.03), transparent, rgba(201,168,76,0.03))' }} />
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', position: 'relative' }}>
+          {stats.map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={statsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.15, duration: 0.5 }}
+              style={{
+                padding: '36px 20px', textAlign: 'center',
+                borderRight: i < 3 ? '1px solid rgba(201,168,76,0.1)' : 'none',
+                position: 'relative',
+              }}
+            >
+              <div style={{ color: 'rgba(201,168,76,0.3)', fontSize: '20px', marginBottom: '8px' }}>{stat.icon}</div>
+              <div style={{ fontSize: '42px', fontWeight: '900', color: '#c9a84c', marginBottom: '4px', fontFamily: 'monospace' }}>
+                {statsInView ? <CountUp end={stat.end} duration={2.5} suffix={stat.suffix} /> : `0${stat.suffix}`}
+              </div>
+              <div style={{ fontSize: '13px', color: '#9ca3af', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase' }}>{stat.label}</div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* ====== TRUST STRIP ====== */}
-      <section className="bg-navy-dark" style={{ padding: '0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', textAlign: 'center' }}>
-          {[
-            { num: 500, suffix: '+', label: 'Loads Delivered' },
-            { num: 50, suffix: '+', label: 'Active Clients' },
-            { num: 98, suffix: '%', label: 'On-Time Rate' },
-            { num: 24, suffix: '/7', label: 'Support Available' },
-          ].map((stat, i) => (
-            <div key={i} style={{ padding: '30px 20px', borderRight: i < 3 ? '1px solid rgba(201,168,76,0.15)' : 'none' }}>
-              <div style={{ fontSize: '36px', fontWeight: '800', color: '#c9a84c', marginBottom: '4px' }}>
-                <Counter end={stat.num} suffix={stat.suffix} />
-              </div>
-              <div style={{ fontSize: '14px', color: '#9ca3af', fontWeight: '500' }}>{stat.label}</div>
+      {/* ====== MARQUEE TRUST STRIP ====== */}
+      <section ref={marqueeRef} style={{ background: '#c9a84c', padding: '14px 0', overflow: 'hidden' }}>
+        <div className="marquee-track">
+          {[...Array(3)].map((_, j) => (
+            <div key={j} style={{ display: 'flex', gap: '50px', paddingRight: '50px' }}>
+              {['Nationwide Coverage', 'On-Time Delivery', 'Vetted Carriers', 'Dedicated Support', '24/7 Availability', 'Competitive Rates', 'Real-Time Tracking', 'Custom Solutions'].map((text, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', whiteSpace: 'nowrap' }}>
+                  <FaStar style={{ color: '#1a2332', fontSize: '10px' }} />
+                  <span style={{ color: '#1a2332', fontWeight: '700', fontSize: '14px', letterSpacing: '0.5px' }}>{text}</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </section>
 
-      {/* ====== SERVICES SECTION ====== */}
-      <section ref={servicesRef} style={{ padding: '80px 24px', background: '#ffffff' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '8px' }}>Freight Agent Services</h2>
-          <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '12px' }}>Your trusted partner for comprehensive freight management</p>
-          <div className="gold-divider" style={{ marginBottom: '48px' }} />
+      {/* ====== SERVICES ====== */}
+      <section ref={servicesRef} style={{ padding: '100px 24px', background: '#ffffff' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={servicesInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            style={{ textAlign: 'center', marginBottom: '60px' }}
+          >
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>WHAT WE OFFER</span>
+            <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 12px' }}>Freight Agent Services</h2>
+            <p style={{ color: '#6b7280', fontSize: '17px', maxWidth: '550px', margin: '0 auto 16px' }}>Your trusted partner for comprehensive freight management</p>
+            <div className="gold-line" style={{ margin: '0 auto' }} />
+          </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: '24px' }}>
             {services.map((s, i) => (
-              <div key={i} className={`service-card ${servicesInView ? 'animate-fade-in-up' : ''}`}
-                style={{
-                  padding: '36px 24px', borderRadius: '8px', background: '#fff', textAlign: 'center',
-                  opacity: servicesInView ? 1 : 0, animationDelay: `${i * 0.15}s`,
-                }}>
-                <div style={{ color: '#c9a84c', marginBottom: '16px' }}>{s.icon}</div>
-                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>{s.title}</h3>
-                <p style={{ color: '#6b7280', fontSize: '14px', lineHeight: '1.6', marginBottom: '16px' }}>{s.desc}</p>
-                <Link to="/services" className="btn-outline-gold" style={{ fontSize: '13px', padding: '8px 20px' }}>
-                  Learn More
-                </Link>
-              </div>
+              <motion.div
+                key={i}
+                className="service-card-3d"
+                initial={{ opacity: 0, y: 40 }}
+                animate={servicesInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+              >
+                <div className="service-card-inner" style={{ textAlign: 'center' }}>
+                  <div className="icon-float">{s.icon}</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '10px' }}>{s.title}</h3>
+                  <p style={{ color: '#6b7280', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px' }}>{s.desc}</p>
+                  <Link to="/services" style={{
+                    color: '#c9a84c', textDecoration: 'none', fontSize: '14px', fontWeight: '700',
+                    display: 'inline-flex', alignItems: 'center', gap: '6px', transition: 'gap 0.3s',
+                  }}
+                    onMouseEnter={(e) => e.currentTarget.style.gap = '12px'}
+                    onMouseLeave={(e) => e.currentTarget.style.gap = '6px'}
+                  >
+                    Learn More <FaArrowRight size={12} />
+                  </Link>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ====== FULL-WIDTH TRUCK IMAGE PARALLAX ====== */}
+      <section style={{ height: '400px', position: 'relative', overflow: 'hidden' }}>
+        <motion.div
+          style={{
+            position: 'absolute', inset: '-10%',
+            backgroundImage: `url(${TRUCK_IMAGES.truck3})`,
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,23,36,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            style={{ textAlign: 'center', padding: '0 24px' }}
+          >
+            <FaQuoteLeft style={{ color: '#c9a84c', fontSize: '36px', marginBottom: '20px' }} />
+            <p style={{ color: '#ffffff', fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: '600', lineHeight: '1.5', maxWidth: '800px', fontStyle: 'italic' }}>
+              "Our focus is simple — deliver dependable service, maintain clear communication, and move freight efficiently from origin to destination."
+            </p>
+            <div className="gold-line" style={{ margin: '24px auto 0' }} />
+          </motion.div>
+        </div>
+      </section>
+
       {/* ====== WHY CHOOSE US ====== */}
-      <section ref={whyRef} className="bg-navy" style={{ padding: '80px 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px', alignItems: 'center' }}>
-            <div className={whyInView ? 'animate-slide-left' : ''} style={{ opacity: whyInView ? 1 : 0 }}>
-              <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#ffffff', marginBottom: '8px' }}>
+      <section ref={whyRef} className="bg-navy" style={{ padding: '100px 24px', position: 'relative', overflow: 'hidden' }}>
+        {/* Background pattern */}
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(201,168,76,0.03)', transform: 'translate(50%, -50%)' }} />
+
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '60px', alignItems: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={whyInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>WHY CHOOSE US</span>
+              <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', color: '#fff', margin: '10px 0 16px' }}>
                 Why Work With <span className="text-gradient-gold">Arnold Freight?</span>
               </h2>
-              <div className="gold-divider" style={{ margin: '16px 0 24px' }} />
-              <p style={{ color: '#d1d5db', fontSize: '16px', lineHeight: '1.7', marginBottom: '32px' }}>
-                While we operate with the capability and professionalism of a full-scale logistics company, we maintain a hands-on, responsive approach. Every client works directly with a dedicated point of contact.
+              <div className="gold-line" style={{ marginBottom: '24px' }} />
+              <p style={{ color: '#d1d5db', fontSize: '16px', lineHeight: '1.8', marginBottom: '36px' }}>
+                We maintain a hands-on, responsive approach. Every client works directly with a dedicated point of contact who understands their shipping needs.
               </p>
+
               {[
                 { icon: <FaHandshake />, title: 'Direct Communication', desc: 'Work directly with a dedicated logistics professional who knows your business.' },
                 { icon: <FaClock />, title: 'Fast Response Times', desc: 'Efficient execution and quick turnaround on every request.' },
                 { icon: <FaShieldAlt />, title: 'Reliable Network', desc: 'Access to a vetted, nationwide carrier network you can trust.' },
                 { icon: <FaTruck />, title: 'Flexible Solutions', desc: 'Tailored logistics solutions designed around your business needs.' },
               ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '8px', background: 'rgba(201,168,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c', flexShrink: 0 }}>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={whyInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + i * 0.15, duration: 0.5 }}
+                  style={{
+                    display: 'flex', gap: '16px', marginBottom: '20px', padding: '16px',
+                    borderRadius: '12px', transition: 'background 0.3s',
+                    cursor: 'default',
+                  }}
+                  whileHover={{ backgroundColor: 'rgba(201,168,76,0.08)', x: 5 }}
+                >
+                  <div style={{
+                    width: '48px', height: '48px', borderRadius: '12px',
+                    background: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05))',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c', flexShrink: 0,
+                  }}>
                     {item.icon}
                   </div>
                   <div>
-                    <h4 style={{ color: '#ffffff', fontSize: '16px', fontWeight: '600', margin: '0 0 4px' }}>{item.title}</h4>
-                    <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>{item.desc}</p>
+                    <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '700', margin: '0 0 4px' }}>{item.title}</h4>
+                    <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>{item.desc}</p>
                   </div>
-                </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={whyInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <div className="parallax-img" style={{ height: '550px', borderRadius: '20px' }}>
+                <img src={TRUCK_IMAGES.truck2} alt="White American freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ====== HOW IT WORKS — TIMELINE ====== */}
+      <section ref={stepsRef} style={{ padding: '100px 24px', background: '#f9fafb' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '60px', alignItems: 'center' }}>
+            {/* Image side */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={stepsInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="parallax-img" style={{ height: '500px' }}>
+                <img src={TRUCK_IMAGES.truck5} alt="White semi truck on highway" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </motion.div>
+
+            {/* Steps side */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={stepsInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6 }}
+              >
+                <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>HOW IT WORKS</span>
+                <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 12px' }}>
+                  Simple. Reliable. <span className="text-gradient-gold">Efficient.</span>
+                </h2>
+                <div className="gold-line" style={{ marginBottom: '40px' }} />
+              </motion.div>
+
+              {[
+                { num: '1', title: 'Request a Quote', desc: 'Provide your shipment details and receive a fast, competitive quote tailored to your needs.' },
+                { num: '2', title: 'We Secure the Right Carrier', desc: 'We match your load with a vetted, reliable carrier from our nationwide network.' },
+                { num: '3', title: 'Track & Deliver', desc: 'Stay informed with real-time updates while we ensure safe, on-time delivery.' },
+              ].map((step, i) => (
+                <motion.div
+                  key={i}
+                  className="timeline-step"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={stepsInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + i * 0.2, duration: 0.6 }}
+                >
+                  <div className="timeline-number">{step.num}</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px', marginTop: 0 }}>{step.title}</h3>
+                  <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: '1.7', margin: 0 }}>{step.desc}</p>
+                </motion.div>
               ))}
             </div>
-
-            <div className={whyInView ? 'animate-slide-right' : ''} style={{ opacity: whyInView ? 1 : 0 }}>
-              <div style={{
-                borderRadius: '12px', overflow: 'hidden', position: 'relative',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-              }}>
-                <img
-                  src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80"
-                  alt="Freight truck on highway"
-                  style={{ width: '100%', height: '500px', objectFit: 'cover' }}
-                />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(15,23,36,0.9))', padding: '40px 24px 24px' }}>
-                  <FaQuoteLeft style={{ color: '#c9a84c', fontSize: '24px', marginBottom: '12px' }} />
-                  <p style={{ color: '#ffffff', fontSize: '16px', fontStyle: 'italic', lineHeight: '1.6', margin: 0 }}>
-                    "Our focus is simple — deliver dependable service, maintain clear communication, and move freight efficiently."
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* ====== HOW IT WORKS ====== */}
-      <section ref={stepsRef} style={{ padding: '80px 24px', background: '#f9fafb' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '8px' }}>Simple. Reliable. Efficient.</h2>
-          <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '12px' }}>Getting your freight moving is easy</p>
-          <div className="gold-divider" style={{ marginBottom: '48px' }} />
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
-            {steps.map((step, i) => (
-              <div key={i} className={stepsInView ? 'animate-fade-in-up' : ''}
-                style={{
-                  padding: '40px 24px', background: '#ffffff', borderRadius: '8px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-                  opacity: stepsInView ? 1 : 0, animationDelay: `${i * 0.2}s`,
-                  position: 'relative',
-                }}>
-                <div className="step-circle">{step.num}</div>
-                <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>{step.title}</h3>
-                <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: '1.6', margin: 0 }}>{step.desc}</p>
-                {i < 2 && (
-                  <FaArrowRight style={{ position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)', color: '#c9a84c', fontSize: '20px', display: 'none' }} className="hidden lg:block" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ====== QUOTE / CONTACT SECTION ====== */}
-      <section ref={quoteRef} style={{ padding: '80px 24px', background: '#f0f0f0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px', alignItems: 'center' }}>
-            {/* Left side */}
-            <div className={quoteInView ? 'animate-slide-left' : ''} style={{ opacity: quoteInView ? 1 : 0 }}>
-              <h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px' }}>
+      {/* ====== QUOTE SECTION ====== */}
+      <section ref={quoteRef} style={{ padding: '100px 24px', background: '#f0f0f0', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={quoteInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>CONTACT US</span>
+              <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 16px' }}>
                 Get a Quote or <span className="text-gradient-gold">Ask About Services</span>
               </h2>
-              <p style={{ color: '#6b7280', fontSize: '16px', lineHeight: '1.7', marginBottom: '32px' }}>
+              <p style={{ color: '#6b7280', fontSize: '16px', lineHeight: '1.8', marginBottom: '32px' }}>
                 We're here to provide solutions for your freight needs. Contact us for a free quote or with any inquiries.
               </p>
 
-              <div style={{
-                borderRadius: '12px', overflow: 'hidden', marginBottom: '24px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-              }}>
-                <img
-                  src="https://images.unsplash.com/photo-1560264280-88b68371db39?w=600&q=80"
-                  alt="Customer service agent"
-                  style={{ width: '100%', height: '250px', objectFit: 'cover' }}
-                />
+              <div className="parallax-img" style={{ height: '280px', marginBottom: '24px' }}>
+                <img src={TRUCK_IMAGES.truck4} alt="White freight truck" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <a href="tel:5551234567" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1a2332', textDecoration: 'none', fontSize: '18px', fontWeight: '600' }}>
-                  <FaPhoneAlt style={{ color: '#c9a84c' }} /> (555) 123-4567
+                <a href="tel:5551234567" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#1a2332', textDecoration: 'none', fontSize: '22px', fontWeight: '800' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #c9a84c, #b8943a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a2332' }}>
+                    <FaPhoneAlt />
+                  </div>
+                  (555) 123-4567
                 </a>
-                <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>
-                  <span className="text-gold" style={{ fontWeight: '600' }}>DOT #1234567</span> | <span className="text-gold" style={{ fontWeight: '600' }}>MC #7854321</span>
+                <p style={{ color: '#c9a84c', fontSize: '15px', margin: 0, fontWeight: '700' }}>
+                  DOT #1234567 &nbsp;|&nbsp; MC #7854321
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Right side - Quote form */}
-            <div className={quoteInView ? 'animate-slide-right' : ''} style={{ opacity: quoteInView ? 1 : 0 }}>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={quoteInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               <QuoteForm />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ====== CTA BANNER ====== */}
-      <section className="bg-gold" style={{ padding: '50px 24px', textAlign: 'center' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '30px', fontWeight: '700', color: '#1a2332', marginBottom: '12px' }}>
+      <section className="gradient-animate" style={{
+        padding: '70px 24px', textAlign: 'center', position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(135deg, #c9a84c, #d4b96a, #b8943a, #c9a84c)',
+        backgroundSize: '200% 200%',
+      }}>
+        {/* Truck pattern */}
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.05 }}>
+          {[...Array(5)].map((_, i) => (
+            <FaTruck key={i} style={{ position: 'absolute', fontSize: '100px', left: `${i * 25}%`, top: '20%', transform: `rotate(${-5 + i * 3}deg)` }} />
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{ maxWidth: '700px', margin: '0 auto', position: 'relative' }}
+        >
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: '900', color: '#1a2332', marginBottom: '12px' }}>
             Ready to Move Your Freight?
           </h2>
-          <p style={{ color: '#374151', fontSize: '16px', marginBottom: '24px' }}>
+          <p style={{ color: '#374151', fontSize: '17px', marginBottom: '28px' }}>
             Contact us today for reliable, efficient freight solutions.
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/contact" style={{
-              background: '#1a2332', color: '#ffffff', padding: '14px 32px',
-              borderRadius: '4px', textDecoration: 'none', fontWeight: '600',
-              transition: 'all 0.3s', display: 'flex', alignItems: 'center', gap: '8px',
-            }}>
+              background: '#1a2332', color: '#ffffff', padding: '16px 36px',
+              borderRadius: '6px', textDecoration: 'none', fontWeight: '700', fontSize: '16px',
+              transition: 'all 0.4s', display: 'flex', alignItems: 'center', gap: '10px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.3)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2)'; }}
+            >
               <FaCheckCircle /> Get Started Today
             </Link>
             <a href="tel:5551234567" style={{
-              background: 'transparent', color: '#1a2332', padding: '14px 32px',
-              borderRadius: '4px', textDecoration: 'none', fontWeight: '600',
-              border: '2px solid #1a2332', transition: 'all 0.3s',
-              display: 'flex', alignItems: 'center', gap: '8px',
-            }}>
+              background: 'transparent', color: '#1a2332', padding: '16px 36px',
+              borderRadius: '6px', textDecoration: 'none', fontWeight: '700', fontSize: '16px',
+              border: '2px solid #1a2332', transition: 'all 0.4s',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#1a2332'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1a2332'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
               <FaPhoneAlt /> Call Now
             </a>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );

@@ -1,24 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FaTruck, FaHandshake, FaChartLine, FaUsers } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import {
+  FaTruck, FaHandshake, FaChartLine, FaUsers, FaMapMarkerAlt,
+  FaBriefcase, FaCheckCircle, FaPaperPlane
+} from 'react-icons/fa';
 
-const useInView = (threshold = 0.15) => {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setInView(true);
-    }, { threshold });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold]);
-  return [ref, inView];
+import highwayTruck from '../assets/highway-truck.jpg';
+import servicesTruck from '../assets/services-truck.png';
+
+const TRUCK_IMAGES = {
+  hero: servicesTruck,
+  truck2: highwayTruck,
 };
 
 const Careers = () => {
-  const [heroRef, heroInView] = useInView(0.1);
-  const [whyRef, whyInView] = useInView();
-  const [openingsRef, openingsInView] = useInView();
+  const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [whyRef, whyInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [openingsRef, openingsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [hoveredJob, setHoveredJob] = useState(null);
 
   const perks = [
     { icon: <FaChartLine size={28} />, title: 'Growth Opportunity', desc: 'Join a growing company with room to advance your career in logistics.' },
@@ -28,157 +29,262 @@ const Careers = () => {
   ];
 
   const openings = [
-    { title: 'Freight Broker Agent', type: 'Full-Time', location: 'Chattanooga, TN / Remote', desc: 'Coordinate shipments, build carrier relationships, and deliver excellent service to clients.' },
-    { title: 'Logistics Coordinator', type: 'Full-Time', location: 'Chattanooga, TN', desc: 'Support daily operations including load tracking, carrier communication, and documentation.' },
-    { title: 'Carrier Sales Representative', type: 'Full-Time', location: 'Remote', desc: 'Grow our carrier network by recruiting reliable carriers and negotiating competitive rates.' },
+    { title: 'Freight Broker Agent', type: 'Full-Time', location: 'Chattanooga, TN / Remote', desc: 'Coordinate shipments, build carrier relationships, and deliver excellent service to clients.', tags: ['Sales', 'Logistics', 'Client-Facing'] },
+    { title: 'Logistics Coordinator', type: 'Full-Time', location: 'Chattanooga, TN', desc: 'Support daily operations including load tracking, carrier communication, and documentation.', tags: ['Operations', 'Detail-Oriented', 'Tracking'] },
+    { title: 'Carrier Sales Representative', type: 'Full-Time', location: 'Remote', desc: 'Grow our carrier network by recruiting reliable carriers and negotiating competitive rates.', tags: ['Sales', 'Negotiation', 'Networking'] },
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 4000);
+    setTimeout(() => setFormSubmitted(false), 5000);
+    e.target.reset();
   };
 
   return (
-    <div>
+    <div style={{ overflow: 'hidden' }}>
       {/* ====== HERO ====== */}
       <section ref={heroRef} style={{
-        paddingTop: '140px', paddingBottom: '80px',
-        background: 'linear-gradient(135deg, #0f1724 0%, #1a2332 100%)',
-        position: 'relative', overflow: 'hidden',
+        paddingTop: '140px', paddingBottom: '100px',
+        background: '#0f1724', position: 'relative', overflow: 'hidden',
       }}>
         <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1920&q=80)',
-          backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15,
+          position: 'absolute', inset: '-5%',
+          backgroundImage: `url(${TRUCK_IMAGES.hero})`,
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          filter: 'brightness(0.25)',
         }} />
-        <div className="hero-overlay" style={{ position: 'absolute', inset: 0 }} />
+        <div className="gradient-animate" style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, rgba(15,23,36,0.95), rgba(26,35,50,0.7), rgba(201,168,76,0.1))',
+          backgroundSize: '200% 200%',
+        }} />
 
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <div className={heroInView ? 'animate-fade-in-up' : ''} style={{ opacity: heroInView ? 1 : 0 }}>
-            <h1 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: '800', color: '#ffffff', marginBottom: '16px' }}>
-              Join the <span className="text-gradient-gold">Arnold Freight</span> Team
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={heroInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+          >
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>JOIN OUR TEAM</span>
+            <h1 style={{ fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: '900', color: '#fff', margin: '12px 0 16px', lineHeight: '1.1' }}>
+              Build Your Career at <span className="text-gradient-gold">Arnold Freight</span>
             </h1>
-            <p style={{ fontSize: '18px', color: '#d1d5db', lineHeight: '1.7', maxWidth: '600px', margin: '0 auto 32px' }}>
+            <p style={{ fontSize: '18px', color: '#d1d5db', lineHeight: '1.8', maxWidth: '600px', margin: '0 auto 36px' }}>
               We're looking for driven professionals who want to make an impact in the freight and logistics industry.
             </p>
-            <a href="#openings" className="btn-gold" style={{ fontSize: '16px' }}>View Open Positions</a>
-          </div>
+            <a href="#openings" className="btn-gold pulse-ring" style={{ fontSize: '16px', padding: '16px 40px' }}>
+              View Open Positions
+            </a>
+          </motion.div>
         </div>
       </section>
 
-      {/* ====== WHY JOIN US ====== */}
-      <section ref={whyRef} style={{ padding: '80px 24px', background: '#ffffff' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '8px' }}>Why Join <span className="text-gradient-gold">Arnold Freight?</span></h2>
-          <p style={{ color: '#6b7280', fontSize: '16px', marginBottom: '12px' }}>Build your career with a company that values its people</p>
-          <div className="gold-divider" style={{ marginBottom: '48px' }} />
+      {/* ====== WHY JOIN ====== */}
+      <section ref={whyRef} style={{ padding: '100px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={whyInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            style={{ textAlign: 'center', marginBottom: '60px' }}
+          >
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>WHY JOIN US</span>
+            <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 12px' }}>
+              Why Join <span className="text-gradient-gold">Arnold Freight?</span>
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: '17px' }}>Build your career with a company that values its people</p>
+            <div className="gold-line" style={{ margin: '16px auto 0' }} />
+          </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: '24px' }}>
             {perks.map((p, i) => (
-              <div key={i} className={whyInView ? 'animate-fade-in-up' : ''}
-                style={{
-                  padding: '40px 24px', background: '#f9fafb', borderRadius: '8px',
-                  border: '1px solid #e5e7eb', transition: 'all 0.3s',
-                  opacity: whyInView ? 1 : 0, animationDelay: `${i * 0.15}s`,
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#c9a84c'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}>
-                <div style={{ color: '#c9a84c', marginBottom: '16px' }}>{p.icon}</div>
-                <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '10px' }}>{p.title}</h3>
-                <p style={{ color: '#6b7280', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>{p.desc}</p>
-              </div>
+              <motion.div
+                key={i}
+                className="service-card-3d"
+                initial={{ opacity: 0, y: 40 }}
+                animate={whyInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+              >
+                <div className="service-card-inner" style={{ textAlign: 'center' }}>
+                  <div className="icon-float">{p.icon}</div>
+                  <h3 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '10px' }}>{p.title}</h3>
+                  <p style={{ color: '#6b7280', fontSize: '14px', lineHeight: '1.7', margin: 0 }}>{p.desc}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ====== TRUCK IMAGE BREAK ====== */}
+      <section style={{ height: '300px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `url(${TRUCK_IMAGES.truck2})`,
+          backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0, background: 'rgba(15,23,36,0.8)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            style={{ textAlign: 'center', padding: '0 24px' }}
+          >
+            <h3 style={{ color: '#fff', fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: '800', marginBottom: '12px' }}>
+              Join a Team That <span className="text-gradient-gold">Moves America</span>
+            </h3>
+            <p style={{ color: '#d1d5db', fontSize: '16px', maxWidth: '500px', margin: '0 auto' }}>
+              Be part of a company that keeps supply chains running and businesses growing.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ====== OPEN POSITIONS ====== */}
-      <section id="openings" ref={openingsRef} className="bg-navy" style={{ padding: '80px 24px' }}>
+      <section id="openings" ref={openingsRef} className="bg-navy" style={{ padding: '100px 24px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#ffffff', marginBottom: '8px' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={openingsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            style={{ textAlign: 'center', marginBottom: '60px' }}
+          >
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>OPPORTUNITIES</span>
+            <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', color: '#fff', margin: '10px 0 12px' }}>
               Open <span className="text-gradient-gold">Positions</span>
             </h2>
-            <div className="gold-divider" />
-          </div>
+            <div className="gold-line" style={{ margin: '0 auto' }} />
+          </motion.div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {openings.map((job, i) => (
-              <div key={i} className={openingsInView ? 'animate-fade-in-up' : ''}
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -30 }}
+                animate={openingsInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: i * 0.15 }}
+                onMouseEnter={() => setHoveredJob(i)}
+                onMouseLeave={() => setHoveredJob(null)}
                 style={{
-                  padding: '28px 32px', background: 'rgba(255,255,255,0.05)',
-                  borderRadius: '8px', border: '1px solid rgba(201,168,76,0.2)',
-                  opacity: openingsInView ? 1 : 0, animationDelay: `${i * 0.15}s`,
-                  transition: 'all 0.3s',
+                  padding: '28px 32px',
+                  background: hoveredJob === i ? 'rgba(201,168,76,0.08)' : 'rgba(255,255,255,0.03)',
+                  borderRadius: '16px',
+                  border: hoveredJob === i ? '2px solid #c9a84c' : '2px solid rgba(255,255,255,0.08)',
+                  transition: 'all 0.4s',
+                  transform: hoveredJob === i ? 'translateX(8px)' : 'translateX(0)',
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#c9a84c'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                   <div>
-                    <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#ffffff', marginBottom: '6px', marginTop: 0 }}>{job.title}</h3>
-                    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                      <span style={{ fontSize: '13px', background: 'rgba(201,168,76,0.15)', color: '#c9a84c', padding: '4px 12px', borderRadius: '12px' }}>{job.type}</span>
-                      <span style={{ fontSize: '13px', color: '#9ca3af' }}>{job.location}</span>
+                    <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#fff', marginTop: 0, marginBottom: '8px' }}>{job.title}</h3>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                      <span style={{ fontSize: '12px', background: 'rgba(201,168,76,0.15)', color: '#c9a84c', padding: '5px 14px', borderRadius: '50px', fontWeight: '700' }}>
+                        <FaBriefcase style={{ marginRight: '4px', fontSize: '10px' }} /> {job.type}
+                      </span>
+                      <span style={{ fontSize: '12px', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <FaMapMarkerAlt style={{ fontSize: '10px' }} /> {job.location}
+                      </span>
                     </div>
-                    <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>{job.desc}</p>
+                    <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 12px', lineHeight: '1.6' }}>{job.desc}</p>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {job.tags.map((tag, j) => (
+                        <span key={j} style={{ fontSize: '11px', background: 'rgba(255,255,255,0.06)', color: '#d1d5db', padding: '4px 10px', borderRadius: '4px', fontWeight: '600' }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <a href="#apply" className="btn-outline-gold" style={{ fontSize: '13px', padding: '8px 20px', flexShrink: 0 }}>
+                  <motion.a
+                    href="#apply"
+                    className="btn-gold"
+                    style={{ fontSize: '13px', padding: '10px 24px', flexShrink: 0 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     Apply Now
-                  </a>
+                  </motion.a>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ====== APPLICATION FORM ====== */}
-      <section id="apply" style={{ padding: '80px 24px', background: '#f9fafb' }}>
+      <section id="apply" style={{ padding: '100px 24px', background: '#f9fafb' }}>
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: '700' }}>Apply <span className="text-gradient-gold">Today</span></h2>
-            <p style={{ color: '#6b7280', fontSize: '16px' }}>Send us your information and we'll be in touch</p>
-            <div className="gold-divider" style={{ marginTop: '12px' }} />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{ textAlign: 'center', marginBottom: '48px' }}
+          >
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>APPLY NOW</span>
+            <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 12px' }}>
+              Apply <span className="text-gradient-gold">Today</span>
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: '17px' }}>Send us your information and we'll be in touch</p>
+            <div className="gold-line" style={{ margin: '16px auto 0' }} />
+          </motion.div>
 
-          {formSubmitted && (
-            <div style={{
-              background: 'rgba(201, 168, 76, 0.15)', border: '1px solid #c9a84c',
-              padding: '16px', borderRadius: '8px', marginBottom: '24px',
-              color: '#b8943a', fontSize: '15px', textAlign: 'center',
-            }}>
-              Thank you for your application! We'll review it and get back to you soon.
-            </div>
-          )}
+          <AnimatePresence>
+            {formSubmitted && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                style={{
+                  background: 'rgba(201, 168, 76, 0.12)', border: '2px solid rgba(201,168,76,0.3)',
+                  padding: '16px 24px', borderRadius: '12px', marginBottom: '24px',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  color: '#b8943a', fontSize: '15px', fontWeight: '600',
+                }}
+              >
+                <FaCheckCircle size={20} /> Thank you for your application! We'll review it and get back to you soon.
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <form onSubmit={handleSubmit} style={{
-            background: '#ffffff', padding: '40px', borderRadius: '12px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-          }}>
+          <motion.form
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              background: '#fff', padding: '44px', borderRadius: '20px',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb',
+            }}
+          >
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>First Name *</label>
-                <input type="text" className="form-input" required placeholder="John" />
+              {[
+                { label: 'First Name', type: 'text', placeholder: 'John' },
+                { label: 'Last Name', type: 'text', placeholder: 'Doe' },
+              ].map((field, i) => (
+                <div key={i}>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>{field.label} *</label>
+                  <input type={field.type} className="form-input" required placeholder={field.placeholder} />
+                </div>
+              ))}
+            </div>
+
+            {[
+              { label: 'Email', type: 'email', placeholder: 'john@example.com' },
+              { label: 'Phone', type: 'tel', placeholder: '(555) 000-0000' },
+            ].map((field, i) => (
+              <div key={i} style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  {field.label} {i === 0 ? '*' : ''}
+                </label>
+                <input type={field.type} className="form-input" required={i === 0} placeholder={field.placeholder} />
               </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>Last Name *</label>
-                <input type="text" className="form-input" required placeholder="Doe" />
-              </div>
-            </div>
+            ))}
 
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>Email *</label>
-              <input type="email" className="form-input" required placeholder="john@example.com" />
-            </div>
-
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>Phone</label>
-              <input type="tel" className="form-input" placeholder="(555) 000-0000" />
-            </div>
-
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>Position Interested In *</label>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>Position Interested In *</label>
               <select className="form-input" required style={{ cursor: 'pointer' }}>
                 <option value="">Select a position...</option>
                 <option>Freight Broker Agent</option>
@@ -188,24 +294,26 @@ const Careers = () => {
               </select>
             </div>
 
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#374151' }}>Tell Us About Yourself</label>
-              <textarea className="form-input" rows="4" placeholder="Share your experience and why you'd like to join Arnold Freight Co..." style={{ resize: 'vertical' }} />
+            <div style={{ marginBottom: '28px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>Tell Us About Yourself</label>
+              <textarea className="form-input" rows="5" placeholder="Share your experience and why you'd like to join Arnold Freight Co..." style={{ resize: 'vertical' }} />
             </div>
 
-            <button type="submit" className="btn-gold" style={{ width: '100%', fontSize: '16px', padding: '14px', border: 'none' }}>
-              Submit Application
-            </button>
-          </form>
+            <motion.button
+              type="submit"
+              className="btn-gold"
+              style={{ width: '100%', fontSize: '16px', padding: '16px', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <FaPaperPlane /> Submit Application
+            </motion.button>
+          </motion.form>
 
-          <div style={{ textAlign: 'center', marginTop: '24px' }}>
-            <p style={{ color: '#6b7280', fontSize: '14px' }}>
-              Or email your resume directly to{' '}
-              <a href="mailto:info@arnoldfreight.com" style={{ color: '#c9a84c', textDecoration: 'none', fontWeight: '600' }}>
-                info@arnoldfreight.com
-              </a>
-            </p>
-          </div>
+          <p style={{ textAlign: 'center', marginTop: '24px', color: '#6b7280', fontSize: '14px' }}>
+            Or email your resume directly to{' '}
+            <a href="mailto:info@arnoldfreight.com" style={{ color: '#c9a84c', textDecoration: 'none', fontWeight: '700' }}>info@arnoldfreight.com</a>
+          </p>
         </div>
       </section>
     </div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import logo from '../assets/logo.png';
+import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/logo-transparent.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,9 +10,7 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -25,86 +24,119 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Services', path: '/services' },
     { name: 'About', path: '/about' },
+    { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-navy transition-all duration-300 ${scrolled ? 'nav-scrolled' : ''}`}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'nav-scrolled bg-navy-dark' : 'bg-navy'}`}
+      style={{ borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : 'none' }}
+    >
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px' }}>
-          {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logo} alt="Arnold Freight Co." style={{ height: '55px', width: 'auto' }} />
+          <Link to="/">
+            <motion.img
+              src={logo}
+              alt="Arnold Freight Co."
+              style={{ height: '60px', width: 'auto' }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }} className="hidden md:flex">
-            {navLinks.map((link) => (
-              <Link
+          {/* Desktop Nav — always visible on desktop, hidden on mobile */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="hidden md:flex">
+            {navLinks.map((link, i) => (
+              <motion.div
                 key={link.name}
-                to={link.path}
-                style={{
-                  color: isActive(link.path) ? '#c9a84c' : '#ffffff',
-                  textDecoration: 'none',
-                  fontSize: '15px',
-                  fontWeight: '500',
-                  transition: 'color 0.3s ease',
-                  borderBottom: isActive(link.path) ? '2px solid #c9a84c' : '2px solid transparent',
-                  paddingBottom: '4px',
-                }}
-                onMouseEnter={(e) => { if (!isActive(link.path)) e.target.style.color = '#c9a84c'; }}
-                onMouseLeave={(e) => { if (!isActive(link.path)) e.target.style.color = '#ffffff'; }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
               >
-                {link.name}
-              </Link>
+                <Link
+                  to={link.path}
+                  style={{
+                    color: isActive(link.path) ? '#c9a84c' : '#ffffff',
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    transition: 'all 0.3s ease',
+                    background: isActive(link.path) ? 'rgba(201,168,76,0.1)' : 'transparent',
+                    letterSpacing: '0.5px',
+                  }}
+                  onMouseEnter={(e) => { if (!isActive(link.path)) { e.target.style.color = '#c9a84c'; e.target.style.background = 'rgba(201,168,76,0.08)'; }}}
+                  onMouseLeave={(e) => { if (!isActive(link.path)) { e.target.style.color = '#ffffff'; e.target.style.background = 'transparent'; }}}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
             ))}
-            <Link to="/contact" className="btn-gold" style={{ fontSize: '14px', padding: '10px 22px' }}>
-              Get a Quote
-            </Link>
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}>
+              <Link to="/contact" className="nav-cta" style={{ marginLeft: '8px' }}>
+                Get a Quote
+              </Link>
+            </motion.div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Toggle — ONLY visible on mobile via CSS media query */}
           <button
-            className="md:hidden"
+            className="mobile-menu-toggle"
             onClick={() => setIsOpen(!isOpen)}
-            style={{ color: '#ffffff', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}
+            style={{ color: '#fff', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', display: 'none' }}
           >
             {isOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden" style={{
-            background: '#1a2332',
-            padding: '20px 0',
-            borderTop: '1px solid rgba(201, 168, 76, 0.2)',
-          }}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                style={{
-                  display: 'block',
-                  color: isActive(link.path) ? '#c9a84c' : '#ffffff',
-                  textDecoration: 'none',
-                  padding: '12px 0',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                }}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link to="/contact" className="btn-gold" style={{ marginTop: '12px', textAlign: 'center', display: 'block' }}>
-              Get a Quote
-            </Link>
-          </div>
-        )}
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className="mobile-menu"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{ overflow: 'hidden', borderTop: '1px solid rgba(201,168,76,0.2)', display: 'none' }}
+            >
+              <div style={{ padding: '20px 0' }}>
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ x: -30, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <Link
+                      to={link.path}
+                      style={{
+                        display: 'block', color: isActive(link.path) ? '#c9a84c' : '#fff',
+                        textDecoration: 'none', padding: '12px 0', fontSize: '16px', fontWeight: '500',
+                      }}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <Link to="/contact" className="btn-gold" style={{ marginTop: '12px', textAlign: 'center', display: 'block' }}>
+                  Get a Quote
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </nav>
+      {/* Gold accent line under navbar */}
+      <div className="nav-gold-line" />
+    </motion.nav>
   );
 };
 
