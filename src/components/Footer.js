@@ -26,7 +26,7 @@ const Footer = () => {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <img src={logo} alt="Arnold Freight Co." style={{ height: '60px', marginBottom: '20px' }} />
+            <img src={logo} alt="Arnold Freight Co." style={{ height: '75px', marginBottom: '20px', filter: 'contrast(1.15) brightness(1.05)' }} />
             <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.8' }}>
               Arnold Freight Co. is committed to providing reliable, efficient freight solutions with a focus on communication, speed, and service.
             </p>
