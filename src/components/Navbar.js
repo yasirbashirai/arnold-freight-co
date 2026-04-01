@@ -80,13 +80,15 @@ const Navbar = () => {
                 </Link>
               </motion.div>
             ))}
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}>
-              <Link to="/contact" className="nav-cta" style={{ marginLeft: '8px' }}>
-                Get a Quote
-              </Link>
-            </motion.div>
           </div>
           </div>
+
+          {/* Get a Quote button — right side */}
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }} className="hidden md:flex">
+            <Link to="/contact" className="nav-cta">
+              Get a Quote
+            </Link>
+          </motion.div>
 
           {/* Mobile Toggle — ONLY visible on mobile via CSS media query */}
           <button
