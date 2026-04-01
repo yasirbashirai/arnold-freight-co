@@ -8,16 +8,13 @@ import {
   FaQuoteLeft, FaAward, FaUsers, FaGlobeAmericas
 } from 'react-icons/fa';
 
-import heroTruck from '../assets/hero-truck.png';
-import warehouseTruck from '../assets/warehouse-truck.png';
-import highwayTruck from '../assets/highway-truck.jpg';
-import servicesTruck from '../assets/services-truck.png';
+import truckImg from '../assets/truck-highway.jpg';
 
 const TRUCK_IMAGES = {
-  hero: highwayTruck,
-  truck2: heroTruck,
-  truck3: warehouseTruck,
-  truck4: servicesTruck,
+  hero: truckImg,
+  truck2: truckImg,
+  truck3: truckImg,
+  truck4: truckImg,
 };
 
 const About = () => {

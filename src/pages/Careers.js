@@ -6,12 +6,11 @@ import {
   FaBriefcase, FaCheckCircle, FaPaperPlane
 } from 'react-icons/fa';
 
-import highwayTruck from '../assets/highway-truck.jpg';
-import servicesTruck from '../assets/services-truck.png';
+import truckImg from '../assets/truck-highway.jpg';
 
 const TRUCK_IMAGES = {
-  hero: servicesTruck,
-  truck2: highwayTruck,
+  hero: truckImg,
+  truck2: truckImg,
 };
 
 const Careers = () => {
