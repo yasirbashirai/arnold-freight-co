@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaTruck } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import logo from '../assets/logo-transparent.png';
+import logo from '../assets/logo-new.png';
 
 const Footer = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
-  FaTruck, FaHandshake, FaChartLine, FaUsers, FaMapMarkerAlt,
+  FaTruck, FaHandshake, FaChartLine, FaUsers,
   FaBriefcase, FaCheckCircle, FaPaperPlane
 } from 'react-icons/fa';
 
@@ -19,19 +19,11 @@ const Careers = () => {
   const [whyRef, whyInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [openingsRef, openingsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [hoveredJob, setHoveredJob] = useState(null);
-
   const perks = [
     { icon: <FaChartLine size={28} />, title: 'Growth Opportunity', desc: 'Join a growing company with room to advance your career in logistics.' },
     { icon: <FaHandshake size={28} />, title: 'Team Culture', desc: 'Work alongside dedicated professionals who value collaboration and respect.' },
     { icon: <FaTruck size={28} />, title: 'Industry Impact', desc: 'Play a key role in keeping supply chains moving across the nation.' },
     { icon: <FaUsers size={28} />, title: 'Supportive Environment', desc: 'We invest in our people with training, support, and competitive compensation.' },
-  ];
-
-  const openings = [
-    { title: 'Freight Broker Agent', type: 'Full-Time', location: 'Chattanooga, TN / Remote', desc: 'Coordinate shipments, build carrier relationships, and deliver excellent service to clients.', tags: ['Sales', 'Logistics', 'Client-Facing'] },
-    { title: 'Logistics Coordinator', type: 'Full-Time', location: 'Chattanooga, TN', desc: 'Support daily operations including load tracking, carrier communication, and documentation.', tags: ['Operations', 'Detail-Oriented', 'Tracking'] },
-    { title: 'Carrier Sales Representative', type: 'Full-Time', location: 'Remote', desc: 'Grow our carrier network by recruiting reliable carriers and negotiating competitive rates.', tags: ['Sales', 'Negotiation', 'Networking'] },
   ];
 
   const handleSubmit = (e) => {
@@ -160,57 +152,29 @@ const Careers = () => {
             <div className="gold-line" style={{ margin: '0 auto' }} />
           </motion.div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {openings.map((job, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -30 }}
-                animate={openingsInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: i * 0.15 }}
-                onMouseEnter={() => setHoveredJob(i)}
-                onMouseLeave={() => setHoveredJob(null)}
-                style={{
-                  padding: '28px 32px',
-                  background: hoveredJob === i ? 'rgba(201,168,76,0.08)' : 'rgba(255,255,255,0.03)',
-                  borderRadius: '16px',
-                  border: hoveredJob === i ? '2px solid #c9a84c' : '2px solid rgba(255,255,255,0.08)',
-                  transition: 'all 0.4s',
-                  transform: hoveredJob === i ? 'translateX(8px)' : 'translateX(0)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#fff', marginTop: 0, marginBottom: '8px' }}>{job.title}</h3>
-                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                      <span style={{ fontSize: '12px', background: 'rgba(201,168,76,0.15)', color: '#c9a84c', padding: '5px 14px', borderRadius: '50px', fontWeight: '700' }}>
-                        <FaBriefcase style={{ marginRight: '4px', fontSize: '10px' }} /> {job.type}
-                      </span>
-                      <span style={{ fontSize: '12px', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <FaMapMarkerAlt style={{ fontSize: '10px' }} /> {job.location}
-                      </span>
-                    </div>
-                    <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 12px', lineHeight: '1.6' }}>{job.desc}</p>
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                      {job.tags.map((tag, j) => (
-                        <span key={j} style={{ fontSize: '11px', background: 'rgba(255,255,255,0.06)', color: '#d1d5db', padding: '4px 10px', borderRadius: '4px', fontWeight: '600' }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <motion.a
-                    href="#apply"
-                    className="btn-gold"
-                    style={{ fontSize: '13px', padding: '10px 24px', flexShrink: 0 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Apply Now
-                  </motion.a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={openingsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            style={{
+              padding: '48px 32px',
+              background: 'rgba(255,255,255,0.03)',
+              borderRadius: '16px',
+              border: '2px solid rgba(201,168,76,0.15)',
+              textAlign: 'center',
+            }}
+          >
+            <FaBriefcase style={{ color: '#c9a84c', fontSize: '40px', marginBottom: '20px' }} />
+            <h3 style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginTop: 0, marginBottom: '12px' }}>
+              No Open Positions at This Time
+            </h3>
+            <p style={{ color: '#9ca3af', fontSize: '16px', lineHeight: '1.7', maxWidth: '500px', margin: '0 auto 24px' }}>
+              We don't have any open positions right now, but we're always looking for talented people. Submit your information below and we'll reach out when opportunities become available.
+            </p>
+            <a href="#apply" className="btn-gold" style={{ fontSize: '15px', padding: '14px 32px' }}>
+              Submit Your Information
+            </a>
+          </motion.div>
         </div>
       </section>
 
@@ -223,11 +187,11 @@ const Careers = () => {
             viewport={{ once: true }}
             style={{ textAlign: 'center', marginBottom: '48px' }}
           >
-            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>APPLY NOW</span>
+            <span style={{ color: '#c9a84c', fontSize: '13px', fontWeight: '700', letterSpacing: '2px' }}>STAY CONNECTED</span>
             <h2 style={{ fontSize: 'clamp(30px, 4vw, 42px)', fontWeight: '800', margin: '10px 0 12px' }}>
-              Apply <span className="text-gradient-gold">Today</span>
+              Join Our <span className="text-gradient-gold">Talent Pool</span>
             </h2>
-            <p style={{ color: '#6b7280', fontSize: '17px' }}>Send us your information and we'll be in touch</p>
+            <p style={{ color: '#6b7280', fontSize: '17px' }}>Send us your information and we'll reach out when positions open up</p>
             <div className="gold-line" style={{ margin: '16px auto 0' }} />
           </motion.div>
 
@@ -284,12 +248,13 @@ const Careers = () => {
             ))}
 
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>Position Interested In *</label>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', marginBottom: '8px', color: '#374151', letterSpacing: '1px', textTransform: 'uppercase' }}>Area of Interest *</label>
               <select className="form-input" required style={{ cursor: 'pointer' }}>
-                <option value="">Select a position...</option>
-                <option>Freight Broker Agent</option>
-                <option>Logistics Coordinator</option>
-                <option>Carrier Sales Representative</option>
+                <option value="">Select an area...</option>
+                <option>Freight Brokerage</option>
+                <option>Logistics / Operations</option>
+                <option>Sales</option>
+                <option>Administration</option>
                 <option>Other</option>
               </select>
             </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/logo-transparent.png';
+import logo from '../assets/logo-new.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,18 +40,19 @@ const Navbar = () => {
     >
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px' }}>
-          <Link to="/">
-            <motion.img
-              src={logo}
-              alt="Arnold Freight Co."
-              style={{ height: '60px', width: 'auto' }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            />
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <Link to="/">
+              <motion.img
+                src={logo}
+                alt="Arnold Freight Co."
+                style={{ height: '60px', width: 'auto' }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              />
+            </Link>
 
-          {/* Desktop Nav — always visible on desktop, hidden on mobile */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="hidden md:flex">
+            {/* Desktop Nav — always visible on desktop, hidden on mobile */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="hidden md:flex">
             {navLinks.map((link, i) => (
               <motion.div
                 key={link.name}
@@ -84,6 +85,7 @@ const Navbar = () => {
                 Get a Quote
               </Link>
             </motion.div>
+          </div>
           </div>
 
           {/* Mobile Toggle — ONLY visible on mobile via CSS media query */}
