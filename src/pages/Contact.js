@@ -4,11 +4,12 @@ import { useInView } from 'react-intersection-observer';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaTruck, FaClock, FaCheckCircle, FaArrowRight } from 'react-icons/fa';
 import QuoteForm from '../components/QuoteForm';
 
-import truckImg from '../assets/truck-highway.jpg';
+import warehouseWorkers from '../assets/warehouse-workers.png';
+import truckSunset from '../assets/truck-sunset.jpg';
 
 const TRUCK_IMAGES = {
-  hero: truckImg,
-  truck2: truckImg,
+  hero: truckSunset,
+  truck2: warehouseWorkers,
 };
 
 const Contact = () => {

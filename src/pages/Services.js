@@ -9,12 +9,14 @@ import {
 import { MdLocalShipping } from 'react-icons/md';
 import QuoteForm from '../components/QuoteForm';
 
-import truckImg from '../assets/truck-highway.jpg';
+import servicesTruck from '../assets/services-truck.png';
+import truckHighway from '../assets/truck-highway.jpg';
+import truckSunset from '../assets/truck-sunset.jpg';
 
 const TRUCK_IMAGES = {
-  hero: truckImg,
-  truck2: truckImg,
-  truck3: truckImg,
+  hero: servicesTruck,
+  truck2: truckSunset,
+  truck3: truckHighway,
 };
 
 const Services = () => {
@@ -30,35 +32,35 @@ const Services = () => {
       title: 'Freight Brokerage',
       desc: 'We coordinate shipments by connecting you with reliable carriers, ensuring cost-effective and efficient transportation from pickup to delivery.',
       features: ['Carrier matching & vetting', 'Rate negotiation', 'Full shipment tracking', 'Documentation management'],
-      image: truckImg,
+      image: servicesTruck,
     },
     {
       icon: <MdLocalShipping size={36} />,
       title: 'Full Truckload (FTL)',
       desc: 'Ideal for large shipments requiring a full trailer. We provide dedicated capacity and direct routes for faster transit times.',
       features: ['Dedicated trailer space', 'Direct point-to-point routes', 'Faster transit times', 'Heavy freight capable'],
-      image: truckImg,
+      image: truckHighway,
     },
     {
       icon: <FaBoxes size={36} />,
       title: 'LTL Shipping',
       desc: 'For smaller shipments, LTL allows you to share trailer space while reducing costs without sacrificing reliability.',
       features: ['Cost-effective pricing', 'Shared capacity options', 'Flexible scheduling', 'Partial loads welcome'],
-      image: truckImg,
+      image: truckSunset,
     },
     {
       icon: <FaRocket size={36} />,
       title: 'Expedited Freight',
       desc: 'When time is critical, we prioritize your shipment to ensure it reaches its destination as quickly as possible.',
       features: ['Priority handling', 'Express routing', 'Real-time GPS updates', 'Time-guaranteed delivery'],
-      image: truckImg,
+      image: truckHighway,
     },
     {
       icon: <FaUserTie size={36} />,
       title: 'Dedicated Support',
       desc: 'Every client works directly with a freight agent who understands your business and provides ongoing support.',
       features: ['Personal freight agent', 'Proactive communication', 'Custom logistics solutions', 'Long-term partnership'],
-      image: truckImg,
+      image: servicesTruck,
     },
   ];
 

@@ -11,15 +11,19 @@ import {
 import { MdLocalShipping } from 'react-icons/md';
 import QuoteForm from '../components/QuoteForm';
 
-/* Local truck image */
-import truckImg from '../assets/truck-highway.jpg';
+/* Local truck images */
+import heroTruck from '../assets/hero-truck.png';
+import truckHighway from '../assets/truck-highway.jpg';
+import warehouseTruck from '../assets/warehouse-truck.png';
+import truckSunset from '../assets/truck-sunset.jpg';
+import truckOpenRoad from '../assets/truck-open-road.jpg';
 
 const TRUCK_IMAGES = {
-  hero: truckImg,
-  truck2: truckImg,
-  truck3: truckImg,
-  truck4: truckImg,
-  truck5: truckImg,
+  hero: heroTruck,
+  truck2: warehouseTruck,
+  truck3: truckHighway,
+  truck4: truckSunset,
+  truck5: truckOpenRoad,
 };
 
 const Home = () => {
