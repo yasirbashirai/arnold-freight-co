@@ -45,7 +45,7 @@ const Navbar = () => {
               <motion.img
                 src={logo}
                 alt="Arnold Freight Co."
-                style={{ height: '75px', width: 'auto', filter: 'contrast(1.15) brightness(1.05)' }}
+                style={{ height: '105px', width: 'auto', filter: 'contrast(1.15) brightness(1.05)' }}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               />
